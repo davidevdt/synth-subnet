@@ -20,12 +20,12 @@
 import time
 import typing
 import bittensor as bt
+import argparse
 
 # import base miner class which takes care of most of the boilerplate
 from simulation.base.miner import BaseMinerNeuron
 from simulation.miner import generate_simulations, generate_fixed_simulation
 from simulation.protocol import Simulation
-
 
 class Miner(BaseMinerNeuron):
     """
@@ -38,8 +38,11 @@ class Miner(BaseMinerNeuron):
 
     def __init__(self, config=None):
         super(Miner, self).__init__(config=config)
-
-        # TODO(developer): Anything specific to your use case you can do here
+        
+        parser = argparse.ArgumentParser()
+        BaseMinerNeuron.add_args(parser)
+        args = parser.parse_args()
+        self.sigma = args.sigma  
 
     async def forward(
         self, synapse: Simulation
@@ -68,7 +71,7 @@ class Miner(BaseMinerNeuron):
         if self.config.miner_type == 'dummy':
             prediction = generate_fixed_simulation(start_time=dt, time_length=86400)
         else:
-            prediction = generate_simulations(start_time=dt, time_length=86400)
+            prediction = generate_simulations(start_time=dt, time_length=86400, sigma=self.sigma)
 
         synapse.simulation_output = prediction
 
