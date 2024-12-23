@@ -175,6 +175,13 @@ def add_miner_args(cls, parser):
         default="default",
         help="Miner type to choose different implementations"
     )
+    
+    parser.add_argument(
+        "--sigma",
+        type=float,
+        default=0.01,
+        help="Standard deviation of the simulated price path"
+    )
 
 
 def add_validator_args(cls, parser):
